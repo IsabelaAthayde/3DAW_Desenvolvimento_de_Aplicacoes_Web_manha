@@ -1,2 +1,0 @@
-nome;email;senha
-Bianca Andrade;biaAn@gmail.com;1234

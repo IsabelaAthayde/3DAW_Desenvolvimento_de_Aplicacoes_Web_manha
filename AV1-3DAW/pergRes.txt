@@ -1,3 +1,5 @@
-pergunta;rA;rB;rC;rD;rE;rCerta
-como beddd?;a1;bf;c2;e3;f4;E5
-como o caava?;455;6b;7n;888;99;11
+id;pergunta;rA;rB;rC;rD;rE;rCerta
+1;Qual é a capital do Brasil?;Acre;Brasília;Minas Gerais;Rio de Janeiro;São Paulo;B
+2;Explique a importância da fotossíntese para a vida na Terra.;;;;;;Produz oxigênio e energia
+3;Qual é o maior planeta do Sistema Solar?;Terra;Marte;Júpiter;Saturno;Vênus;C
+4;O que significa H2O?;;;;;;Água

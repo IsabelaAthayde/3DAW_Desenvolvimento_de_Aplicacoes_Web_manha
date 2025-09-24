@@ -1,2 +1,4 @@
 nome;email;senha
-Bianca Andrade;biaAn@gmail.com;1234
+isa;isa@gmail.com;123
+ze;ze@gmail.com;123
+admin;admin@gmail.com;admin

@@ -1,0 +1,144 @@
+ <!-- <?php
+    if($_SERVER["REQUEST_METHOD"] == "POST") {
+        $pergunta = $_POST['pergunta'];
+        $rA = $_POST['rA'];
+        $rB = $_POST['rB'];
+        $rC = $_POST['rC'];
+        $rD = $_POST['rD'];
+        $rE = $_POST['rE'];
+        $rCerta = $_POST['rCerta'];
+
+        $caminhoPerg = __DIR__ . "/../../pergRes.txt";
+        
+        if(!file_exists($caminhoPerg)) {
+            $arq = fopen($caminhoPerg, "w") or die("erro ao criar arquivo");
+            $linha = "id;pergunta;rA;rB;rC;rD;rE;rCerta\n";
+            fwrite($arq, $linha);
+            fclose($arq);
+        }
+
+        $id = 1;
+        $arq = fopen($caminhoPerg, "r") or die("Erro ao abrir arquivo");
+        fgets($arq); 
+        while(!feof($arq)) {
+            $linha = fgets($arq);
+            if($linha !== false && trim($linha) != "") {
+                $campos = explode(";", trim($linha));
+                $id = ((int)$campos[0]) + 1;
+            }
+        }
+        fclose($arq);
+
+
+        $arqA = fopen($caminhoPerg, "a") or die("erro ao criar arquivo");
+        $linha = $id . ";" . $pergunta . ";" . $rA . ";" . $rB . ";" . $rC . ";" . $rD . ";" . $rE . ";" . $rCerta . "\n";
+
+        fwrite($arqA, $linha);
+        fclose($arqA);
+        
+        $msg = "Pergunta cadastrada com sucesso!";
+    }
+?>  -->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Pergunta</title>
+    <link rel="stylesheet" href="/AV1-3DAW/style.css">
+    <style>
+        .main-align h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .main-align form {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .main-align form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+
+        form {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        form input[type="submit"] {
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        function EnviarMulti() {
+            let perg = document.getElementByID('pergunta').value;
+            let rA = document.getElementByID('rA').value;
+            let rB = document.getElementByID('rB').value;
+            let rC = document.getElementByID('rC').value;
+            let rD = document.getElementByID('rD').value;
+            let rE = document.getElementByID('rE').value;
+
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log("Chegou a resposta OK: " + this.responseText);
+                    console.log("2");
+                    document.getElementById("msg").innerHTML = this.responseText;
+                } else
+                    if (this.readyState < 4) {
+                        console.log("3: " + this.readyState);
+                    } else
+                        console.log("Requisicao falhou: " + this.status);
+            }
+            console.log("4");
+            xmlhttp.open("GET", "http://localhost/3daw/IncluirAluno.php?matricula=" + matricula +
+                            "&nome=" + nome + "&email=" + email);
+            xmlhttp.send();
+        }
+    </script>
+</head>
+<body>
+     <?php include '../../navs/nav.php'; ?>
+    <?php include '../../navs/nav_perguntas.php'; ?>
+    <h2>Criar nova pergunta Multipla Escolhas</h2>
+    <main class="main-align">
+        <form action="criarMulti.php" method="GET" >
+        
+            <label for="pergunta">Pergunta:</label>
+            <input type="text" name="pergunta" id="pergunta" required><br>
+
+            <label for="rA">Resposta letra A:</label>
+            <input type="text" name="rA" id="rA" required><br>
+            
+            <label for="rB">Resposta letra B:</label>
+            <input type="text" name="rB" id="rB" required><br>
+
+            <label for="rC">Resposta letra C:</label>
+            <input type="text" name="rC" id="rC" required><br>
+
+            <label for="rD">Resposta letra D:</label>
+            <input type="text" name="rD" id="rD" required><br>
+
+            <label for="rE">Resposta letra E:</label>
+            <input type="text" name="rE" id="rE" required><br>
+
+            <label for="rCerta">Resposta Certa:</label>
+            <select name="rCerta" id="rCerta" required>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+            </select><br>
+
+            <input type="button" value="Cadastrar" onclick="EnviarMulti()">
+        </form>
+    </main>
+    <?php $msg ?>
+</body>
+</html>
+

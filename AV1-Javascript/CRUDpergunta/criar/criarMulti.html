@@ -1,52 +1,11 @@
- <!-- <?php
-    if($_SERVER["REQUEST_METHOD"] == "POST") {
-        $pergunta = $_POST['pergunta'];
-        $rA = $_POST['rA'];
-        $rB = $_POST['rB'];
-        $rC = $_POST['rC'];
-        $rD = $_POST['rD'];
-        $rE = $_POST['rE'];
-        $rCerta = $_POST['rCerta'];
-
-        $caminhoPerg = __DIR__ . "/../../pergRes.txt";
-        
-        if(!file_exists($caminhoPerg)) {
-            $arq = fopen($caminhoPerg, "w") or die("erro ao criar arquivo");
-            $linha = "id;pergunta;rA;rB;rC;rD;rE;rCerta\n";
-            fwrite($arq, $linha);
-            fclose($arq);
-        }
-
-        $id = 1;
-        $arq = fopen($caminhoPerg, "r") or die("Erro ao abrir arquivo");
-        fgets($arq); 
-        while(!feof($arq)) {
-            $linha = fgets($arq);
-            if($linha !== false && trim($linha) != "") {
-                $campos = explode(";", trim($linha));
-                $id = ((int)$campos[0]) + 1;
-            }
-        }
-        fclose($arq);
-
-
-        $arqA = fopen($caminhoPerg, "a") or die("erro ao criar arquivo");
-        $linha = $id . ";" . $pergunta . ";" . $rA . ";" . $rB . ";" . $rC . ";" . $rD . ";" . $rE . ";" . $rCerta . "\n";
-
-        fwrite($arqA, $linha);
-        fclose($arqA);
-        
-        $msg = "Pergunta cadastrada com sucesso!";
-    }
-?>  -->
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criar Pergunta</title>
-    <link rel="stylesheet" href="/AV1-3DAW/style.css">
+    <link rel="stylesheet" href="/AV1-Javascript/style.css">
+
     <style>
         .main-align h1 {
             text-align: center;
@@ -75,19 +34,21 @@
     </style>
     <script>
         function EnviarMulti() {
-            let perg = document.getElementByID('pergunta').value;
-            let rA = document.getElementByID('rA').value;
-            let rB = document.getElementByID('rB').value;
-            let rC = document.getElementByID('rC').value;
-            let rD = document.getElementByID('rD').value;
-            let rE = document.getElementByID('rE').value;
+            let perg = document.getElementById('pergunta').value;
+            let rA = document.getElementById('rA').value;
+            let rB = document.getElementById('rB').value;
+            let rC = document.getElementById('rC').value;
+            let rD = document.getElementById('rD').value;
+            let rE = document.getElementById('rE').value;
+            let rCerta = document.getElementById('rCerta').value;
+            let msg = document.getElementById("msg");
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     console.log("Chegou a resposta OK: " + this.responseText);
                     console.log("2");
-                    document.getElementById("msg").innerHTML = this.responseText;
+                    msg.innerHTML = this.responseText;
                 } else
                     if (this.readyState < 4) {
                         console.log("3: " + this.readyState);
@@ -95,15 +56,34 @@
                         console.log("Requisicao falhou: " + this.status);
             }
             console.log("4");
-            xmlhttp.open("GET", "http://localhost/3daw/IncluirAluno.php?matricula=" + matricula +
-                            "&nome=" + nome + "&email=" + email);
+            xmlhttp.open("GET", "http://localhost/AV1-Javascript/CRUDpergunta/criar/criarMulti.php?" +
+              "pergunta=" + encodeURIComponent(perg) +
+              "&rA=" + encodeURIComponent(rA) +
+              "&rB=" + encodeURIComponent(rB) +
+              "&rC=" + encodeURIComponent(rC) +
+              "&rD=" + encodeURIComponent(rD) +
+              "&rE=" + encodeURIComponent(rE) +
+              "&rCerta=" + rCerta, true);
+
             xmlhttp.send();
         }
     </script>
 </head>
 <body>
-     <?php include '../../navs/nav.php'; ?>
-    <?php include '../../navs/nav_perguntas.php'; ?>
+     <nav>
+        <a href="/AV1-Javascript/home.php">Home</a>
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarMulti.html">Perguntas</a>
+        <a href="/AV1-Javascript/CRUDusuario/listar.html">Usuários</a>
+        <a href="/AV1-Javascript/logout.php" class="logout">Sair</a>
+    </nav>
+    <div class="sub-nav">
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarMulti.html">Criar Múltipla Escolha</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarDisc.html">Criar Discursiva</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/listar/listarPR.html?reset=1">Quiz Perguntas e Respostas</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/listar/listarUmaPerg.html">Listar uma Pergunta</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/listar/listarTodasP.html">Listar Todas/Alterar/Deletar</a><br>
+    </div>
+
     <h2>Criar nova pergunta Multipla Escolhas</h2>
     <main class="main-align">
         <form action="criarMulti.php" method="GET" >
@@ -138,7 +118,7 @@
             <input type="button" value="Cadastrar" onclick="EnviarMulti()">
         </form>
     </main>
-    <?php $msg ?>
+    <p id="msg"></p>
 </body>
 </html>
 

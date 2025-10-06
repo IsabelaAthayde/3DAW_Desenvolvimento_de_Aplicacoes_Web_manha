@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastrar Usuário</title>
+  <link rel="stylesheet" href="/AV1-Javascript/style.css">
+  <script>
+    function EnviarUsuario() {
+      let nome = document.getElementById("nome").value;
+      let email = document.getElementById("email").value;
+      let senha = document.getElementById("senha").value;
+
+      if (nome === "" || email === "" || senha === "") {
+        document.getElementById("msg").innerHTML = "Preencha todos os campos!";
+        return;
+      }
+
+      let xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("msg").innerHTML = this.responseText;
+        }
+      };
+
+      xmlhttp.open("GET", "cadastro.php?nome=" + encodeURIComponent(nome) + 
+                             "&email=" + encodeURIComponent(email) + 
+                             "&senha=" + encodeURIComponent(senha), true);
+      xmlhttp.send();
+    }
+  </script>
+</head>
+<body>
+
+  <main class="main-align">
+    <form name="formUsuario" id="formUsuario">
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" name="nome" required><br>
+
+      <label for="email">Email:</label>
+      <input type="text" id="email" name="email" required><br>
+
+      <label for="senha">Senha:</label>
+      <input type="text" id="senha" name="senha" required><br><br>
+
+      <input type="button" value="Cadastrar" onclick="EnviarUsuario();">
+
+      <p style="margin-top: 50px; text-align: center;"><a href="/AV1-Javascript/index.html">Voltar ao Login</a></p>
+
+    </form>
+    <p id="msg"></p>
+  </main>
+</body>
+</html>

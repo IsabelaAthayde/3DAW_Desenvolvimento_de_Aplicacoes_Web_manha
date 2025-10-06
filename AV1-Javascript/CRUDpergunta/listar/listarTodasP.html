@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Todas as Perguntas</title>
+    <link rel="stylesheet" href="/AV1-Javascript/style.css">
+
+    <style>
+
+        tr:nth-child(even) {
+            background-color: var(--mP-bg);
+        }
+        tr.discursiva {
+            background-color: var(--dP-bg);
+        }
+        section { padding: 0;}
+
+        table {
+          width: 90%;  
+          max-width: 90%;
+          table-layout: fixed; 
+          word-wrap: break-word;
+        }
+    </style>
+    <script>
+        function listarPerguntas() {
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    document.getElementById("tabelaPerguntas").innerHTML = this.responseText;
+                }
+            };
+            xmlhttp.open("GET", "listarTodasP.php", true);
+            xmlhttp.send();
+        }
+
+        window.onload = function() {
+            listarPerguntas();
+        };
+    </script>
+</head>
+<body>
+    <nav>
+        <a href="/AV1-Javascript/home.php">Home</a>
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarMulti.html">Perguntas</a>
+        <a href="/AV1-Javascript/CRUDusuario/listar.html">Usuários</a>
+        <a href="/AV1-Javascript/logout.php" class="logout">Sair</a>
+    </nav>
+    <div class="sub-nav">
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarMulti.html">Criar Múltipla Escolha</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarDisc.html">Criar Discursiva</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/listar/listarPR.html?reset=1">Quiz Perguntas e Respostas</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/listar/listarUmaPerg.html">Listar uma Pergunta</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/listar/listarTodasP.html">Listar Todas/Alterar/Deletar</a><br>
+    </div>
+    
+    <h2>Lista de Todas as Perguntas</h2>
+    <section id="tabelaPerguntas">
+    </section>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Usuários</title>
+    <link rel="stylesheet" href="/AV1-Javascript/style.css">
+ 
+     
+    <script>
+        function carregarUsuarios() {
+            fetch('listar.php')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('tbodyUsuarios');
+                tbody.innerHTML = '';
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4">Nenhum usuário adicionado</td></tr>';
+                    return;
+                }
+                data.forEach((usuario, index) => {
+                    let row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${usuario[0]}</td>
+                        <td>${usuario[1]}</td>
+                        <td>${usuario[2]}</td>
+                        <td>
+                            <a style="color: green;" href="alterar.html?id=${index+1}">Editar</a> |
+                            <a style="color: red;" href="#" onclick="deletarUsuario(${index+1}); return false;">Deletar</a>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            });
+        }
+
+        function deletarUsuario(id) {
+            if (!confirm('Tem certeza que deseja deletar?')) return;
+            fetch('listar.php?id=' + id)
+            .then(response => response.text())
+            .then(msg => {
+                alert(msg);
+                carregarUsuarios();
+            });
+        }
+
+        window.onload = carregarUsuarios;
+    </script>
+</head>
+<body>
+    <nav>
+        <a href="/AV1-Javascript/home.php">Home</a>
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarMulti.html">Perguntas</a>
+        <a href="/AV1-Javascript/CRUDusuario/listar.html">Usuários</a>
+        <a href="/AV1-Javascript/logout.php" class="logout">Sair</a>
+    </nav>
+    <div class="sub-nav">
+        <a href="/AV1-Javascript/CRUDusuario/listar.html">Listar Usuários</a>
+        <a href="/AV1-Javascript/CRUDusuario/buscar.html">Buscar Usuários</a>
+        <a href="/AV1-Javascript/home.php#altPerfil">Alterar meu Perfil</a>
+    </div>
+
+    
+    <h2>Lista de Usuários</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Senha</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="tbodyUsuarios">
+            <tr><td colspan="4">Carregando...</td></tr>
+        </tbody>
+    </table>
+</body>
+</html>

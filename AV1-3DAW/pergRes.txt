@@ -3,3 +3,4 @@ id;pergunta;rA;rB;rC;rD;rE;rCerta
 2;Explique a importância da fotossíntese para a vida na Terra.;;;;;;Produz oxigênio e energia
 3;Qual é o maior planeta do Sistema Solar?;Terra;Marte;Júpiter;Saturno;Vênus;C
 4;O que significa H2O?;;;;;;Água
+5;Qual é o seu planeta favorito?;;;;;;Sua Resposta

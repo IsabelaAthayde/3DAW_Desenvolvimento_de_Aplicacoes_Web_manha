@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="/AV1-Javascript/style.css">
+ 
+        
+<script>
+        function logar() {
+            const email = document.getElementById('email').value.trim();
+            const senha = document.getElementById('senha').value.trim();
+
+            if (!email || !senha) {
+                document.getElementById('msg').innerHTML = "<p style='color:red;'>Preencha todos os campos!</p>";
+                return;
+            }
+
+            const xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState === 4) {
+                    if (this.status === 200) {
+                        if (this.responseText === "OK") {
+                            window.location.href = "home.php";
+                        } else {
+                            document.getElementById('msg').innerHTML = "<p style='color:red;'>" + this.responseText + "</p>";
+                        }
+                    }
+                }
+            };
+
+            xmlhttp.open("POST", "login.php", true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send("email=" + encodeURIComponent(email) + "&senha=" + encodeURIComponent(senha));
+        }
+    </script>
+</head>
+<body>
+    <main class="main-align">
+        <h2>Login</h2>
+        <p id="msg"></p>
+        <form onsubmit="event.preventDefault(); logar();">
+            Email: <input type="text" id="email" required><br><br>
+            Senha: <input type="password" id="senha" required><br><br>
+            <input type="submit" value="Entrar">
+        </form>
+        <p>Não possui cadastro? <a href="./CRUDusuario/cadastro.html">CADASTRE-SE</a></p>
+    </main>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Deletar Pergunta</title>
+    <link rel="stylesheet" href="/AV1-Javascript/style.css">
+
+    <script>
+        function deletarPergunta() {
+            let id = document.getElementById("id").value;
+            if (!id) {
+                document.getElementById("msg").innerHTML = "Informe o ID da pergunta!";
+                return;
+            }
+
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("msg").innerHTML = this.responseText;
+                }
+            }
+
+            xmlhttp.open("GET", "http://localhost/AV1-Javascript/CRUDpergunta/deletarPergunta.php?id=" + encodeURIComponent(id));
+            xmlhttp.send();
+        }
+    </script>
+
+    <style>
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 15px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/AV1-Javascript/home.php">Home</a>
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarMulti.html">Perguntas</a>
+        <a href="/AV1-Javascript/CRUDusuario/listar.html">Usuários</a>
+        <a href="/AV1-Javascript/logout.php" class="logout">Sair</a>
+    </nav>
+    <div class="sub-nav">
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarMulti.html">Criar Múltipla Escolha</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarDisc.html">Criar Discursiva</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/listar/listarPR.html?reset=1">Quiz Perguntas e Respostas</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/listar/listarUmaPerg.html">Listar uma Pergunta</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/listar/listarTodasP.html">Listar Todas/Alterar/Deletar</a><br>
+    </div>
+
+
+    <h2>Deletar Pergunta</h2>
+    <main class="main-align">
+        <form id="formDelete">
+            ID da pergunta: <input type="text" id="id" required>
+            <input type="button" value="Deletar" onclick="deletarPergunta();">
+        </form>
+        <p id="msg"></p>
+    </main>
+</body>
+</html>

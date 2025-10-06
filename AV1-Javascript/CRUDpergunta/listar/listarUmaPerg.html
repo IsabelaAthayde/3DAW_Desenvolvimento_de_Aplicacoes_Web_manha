@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Listar uma pergunta</title>
+    <link rel="stylesheet" href="/AV1-Javascript/style.css">
+ 
+    <style>
+        form {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        #resultado {
+            margin-top: 20px;
+            display: none;
+        }
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+    </style>
+    <script>
+        let perguntas = [];
+
+        function carregarPerguntas() {
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    perguntas = JSON.parse(this.responseText);
+                    let select = document.getElementById("listaPerg");
+                    select.innerHTML = "";
+                    perguntas.forEach((p, i) => {
+                        let opt = document.createElement("option");
+                        opt.value = i;
+                        opt.textContent = p[0];
+                        select.appendChild(opt);
+                    });
+                }
+            };
+            xmlhttp.open("GET", "listarUmaPerg.php", true);
+            xmlhttp.send();
+        }
+
+        function exibirPergunta() {
+            let indice = document.getElementById("listaPerg").value;
+            if (indice === "") return;
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    let pergunta = JSON.parse(this.responseText);
+                    mostrarPergunta(pergunta);
+                }
+            };
+            xmlhttp.open("POST", "listarUmaPerg.php", true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send("perg=" + indice);
+        }
+
+        function mostrarPergunta(p) {
+            let area = document.getElementById("resultado");
+            area.innerHTML = "";
+            if (!p || p.length === 0) return;
+            area.style.display = "block";
+            let titulo = document.createElement("h3");
+            titulo.textContent = "Pergunta " + p[0] + ":";
+            area.appendChild(titulo);
+
+            let texto = document.createElement("p");
+            texto.textContent = p[1];
+            area.appendChild(texto);
+
+            if (p[2] || p[3] || p[4] || p[5] || p[6]) {
+                let ul = document.createElement("ul");
+                ["A", "B", "C", "D", "E"].forEach((letra, i) => {
+                    if (p[i + 2]) {
+                        let li = document.createElement("li");
+                        li.textContent = letra + ": " + p[i + 2];
+                        ul.appendChild(li);
+                    }
+                });
+                area.appendChild(ul);
+                let resp = document.createElement("p");
+                resp.textContent = "Resposta correta: " + p[7];
+                area.appendChild(resp);
+            } else {
+                let resp = document.createElement("p");
+                resp.textContent = "Resposta discursiva: " + p[7];
+                area.appendChild(resp);
+            }
+        }
+
+        window.onload = carregarPerguntas;
+    </script>
+</head>
+<body>
+    <nav>
+        <a href="/AV1-Javascript/home.php">Home</a>
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarMulti.html">Perguntas</a>
+        <a href="/AV1-Javascript/CRUDusuario/listar.html">Usuários</a>
+        <a href="/AV1-Javascript/logout.php" class="logout">Sair</a>
+    </nav>
+    <div class="sub-nav">
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarMulti.html">Criar Múltipla Escolha</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarDisc.html">Criar Discursiva</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/listar/listarPR.html?reset=1">Quiz Perguntas e Respostas</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/listar/listarUmaPerg.html">Listar uma Pergunta</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/listar/listarTodasP.html">Listar Todas/Alterar/Deletar</a><br>
+    </div>
+    
+    <h2>Escolha uma pergunta</h2>
+    <main class="main-align">
+        <form onsubmit="event.preventDefault(); exibirPergunta();">
+            <select id="listaPerg">
+                <option value="">Carregando...</option>
+            </select>
+            <input type="submit" value="Exibir">
+        </form>
+        <section id="resultado"></section>
+    </main>
+</body>
+</html>

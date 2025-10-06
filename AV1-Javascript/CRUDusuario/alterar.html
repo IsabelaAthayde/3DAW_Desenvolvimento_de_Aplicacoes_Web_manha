@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Alterar Usuário</title>
+    <link rel="stylesheet" href="/AV1-Javascript/style.css">
+ 
+    <style>
+        form { display: flex; flex-direction: column; gap: 10px; }
+    </style>
+    <script>
+        function carregarUsuario() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            if (!id) {
+                alert("ID do usuário não fornecido!");
+                return;
+            }
+            document.getElementById("id").value = id;
+
+            fetch('alterar.php?id=' + id)
+            .then(response => response.json())
+            .then(usuario => {
+                document.getElementById("nome").value = usuario.nome;
+                document.getElementById("email").value = usuario.email;
+                document.getElementById("senha").value = usuario.senha;
+            });
+        }
+
+        function alterarUsuario() {
+            const id = document.getElementById("id").value;
+            const nome = document.getElementById("nome").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const senha = document.getElementById("senha").value.trim();
+
+            if (!nome || !email || !senha) {
+                document.getElementById("msg").innerHTML = "Preencha todos os campos!";
+                return;
+            }
+
+            fetch('alterar.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `id=${encodeURIComponent(id)}&nome=${encodeURIComponent(nome)}&email=${encodeURIComponent(email)}&senha=${encodeURIComponent(senha)}`
+            })
+            .then(response => response.text())
+            .then(msg => document.getElementById("msg").innerHTML = msg);
+        }
+
+        window.onload = carregarUsuario;
+    </script>
+</head>
+<body>
+    <nav>
+        <a href="/AV1-Javascript/home.php">Home</a>
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarMulti.html">Perguntas</a>
+        <a href="/AV1-Javascript/CRUDusuario/listar.html">Usuários</a>
+        <a href="/AV1-Javascript/logout.php" class="logout">Sair</a>
+    </nav>
+    <div class="sub-nav">
+        <a href="/AV1-Javascript/CRUDusuario/listar.html">Listar Usuários</a>
+        <a href="/AV1-Javascript/CRUDusuario/buscar.html">Buscar Usuários</a>
+        <a href="/AV1-Javascript/home.php#altPerfil">Alterar meu Perfil</a>
+    </div>
+
+    <h2>Alterar Usuário</h2>
+    <main class="main-align">
+        <form onsubmit="event.preventDefault(); alterarUsuario();">
+            <input type="hidden" id="id">
+            Nome: <input type="text" id="nome"><br>
+            Email: <input type="text" id="email"><br>
+            Senha: <input type="text" id="senha"><br>
+            <input type="submit" value="Salvar">
+        </form>
+        <p id="msg"></p>
+    </main>
+</body>
+</html>

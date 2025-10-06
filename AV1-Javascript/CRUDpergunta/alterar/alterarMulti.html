@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Alterar Pergunta Multipla</title>
+    <link rel="stylesheet" href="/AV1-Javascript/style.css">
+ 
+
+    <script>
+        function alterarPergunta() {
+            let id = document.getElementById("id").value;
+            let pergunta = document.getElementById("pergunta").value;
+            let a = document.getElementById("a").value;
+            let b = document.getElementById("b").value;
+            let c = document.getElementById("c").value;
+            let d = document.getElementById("d").value;
+            let e = document.getElementById("e").value;
+            let rCerta = document.getElementById("rCerta").value;
+
+            if (!id || !pergunta) {
+                document.getElementById("msg").innerHTML = "Preencha todos os campos!";
+                return;
+            }
+
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("msg").innerHTML = this.responseText;
+                }
+            }
+
+            xmlhttp.open("GET", "http://localhost/AV1-Javascript/CRUDpergunta/alterarMulti.php?id=" + encodeURIComponent(id)
+                + "&pergunta=" + encodeURIComponent(pergunta)
+                + "&a=" + encodeURIComponent(a)
+                + "&b=" + encodeURIComponent(b)
+                + "&c=" + encodeURIComponent(c)
+                + "&d=" + encodeURIComponent(d)
+                + "&e=" + encodeURIComponent(e)
+                + "&rCerta=" + encodeURIComponent(rCerta));
+            xmlhttp.send();
+        }
+    </script>
+
+    <style>
+        form {
+            color: white;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 15px;
+        }
+
+        input, select {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/AV1-Javascript/home.php">Home</a>
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarMulti.html">Perguntas</a>
+        <a href="/AV1-Javascript/CRUDusuario/listar.html">Usuários</a>
+        <a href="/AV1-Javascript/logout.php" class="logout">Sair</a>
+    </nav>
+    <div class="sub-nav">
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarMulti.html">Criar Múltipla Escolha</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarDisc.html">Criar Discursiva</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/listar/listarPR.html?reset=1">Quiz Perguntas e Respostas</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/listar/listarUmaPerg.html">Listar uma Pergunta</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/listar/listarTodasP.html">Listar Todas/Alterar/Deletar</a><br>
+    </div>
+
+    <h2>Alterar Pergunta Múltipla Escolha</h2>
+    <main class="main-align">
+        <form id="formPergunta">
+            ID: <input type="text" id="id" required>
+            Pergunta: <input type="text" id="pergunta" required>
+            Opção A: <input type="text" id="a">
+            Opção B: <input type="text" id="b">
+            Opção C: <input type="text" id="c">
+            Opção D: <input type="text" id="d">
+            Opção E: <input type="text" id="e">
+
+            Resposta certa:
+            <select id="rCerta">
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+            </select>
+
+            <input type="button" value="Salvar" onclick="alterarPergunta();">
+        </form>
+
+        <p id="msg"></p>
+    </main>
+</body>
+</html>

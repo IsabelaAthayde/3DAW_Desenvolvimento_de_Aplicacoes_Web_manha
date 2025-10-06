@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscar Usuário</title>
+    <link rel="stylesheet" href="/AV1-Javascript/style.css">
+ 
+        
+         <style>
+        form {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        table {
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 5px 10px;
+        }
+    </style>
+    <script>
+        function buscarUsuario() {
+            const busca = document.getElementById("busca").value.trim();
+            if (busca === "") {
+                document.getElementById("resultados").innerHTML = "<p>Digite um termo para buscar.</p>";
+                return;
+            }
+
+            const xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    document.getElementById("resultados").innerHTML = this.responseText;
+                }
+            };
+            xmlhttp.open("POST", "buscar.php", true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send("busca=" + encodeURIComponent(busca));
+        }
+    </script>
+</head>
+<body>
+    <nav>
+        <a href="/AV1-Javascript/home.php">Home</a>
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarMulti.html">Perguntas</a>
+        <a href="/AV1-Javascript/CRUDusuario/listar.html">Usuários</a>
+        <a href="/AV1-Javascript/logout.php" class="logout">Sair</a>
+    </nav>
+    <div class="sub-nav">
+        <a href="/AV1-Javascript/CRUDusuario/listar.html">Listar Usuários</a>
+        <a href="/AV1-Javascript/CRUDusuario/buscar.html">Buscar Usuários</a>
+        <a href="/AV1-Javascript/home.php#altPerfil">Alterar meu Perfil</a>
+    </div>
+    
+    <h2>Buscar Usuários</h2>
+    <main class="main-align">
+        <form onsubmit="event.preventDefault(); buscarUsuario();">
+            <input type="text" id="busca" name="busca" placeholder="Nome ou email do usuário">
+            <input type="submit" value="Buscar">
+        </form>
+
+        <section id="resultados"></section>
+    </main>
+</body>
+</html>

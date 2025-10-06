@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Deletar Usuário</title>
+    <link rel="stylesheet" href="/AV1-Javascript/style.css">
+ 
+        
+<script>
+        function DeletarUsuario(id) {
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("msg").innerHTML = this.responseText;
+                }
+            }
+            xmlhttp.open("GET", "deletar.php?id=" + id);
+            xmlhttp.send();
+        }
+    </script>
+</head>
+<body>
+    <main class="main-align">
+        <h2>Excluir Usuário</h2>
+        <input type="number" id="id" placeholder="ID do usuário" required>
+        <input type="button" value="Deletar" onclick="DeletarUsuario(document.getElementById('id').value)">
+        <p id="msg"></p>
+    </main>
+</body>
+</html>

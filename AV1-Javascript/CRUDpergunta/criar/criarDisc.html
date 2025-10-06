@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Criar Pergunta Discursiva</title>
+    <link rel="stylesheet" href="/AV1-Javascript/style.css">
+ 
+    <style>
+        form {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 500px;
+        }
+        textarea {
+            height: 100px;
+            margin-bottom: 15px;
+        }
+        input[type="submit"], input[type="button"] {
+            margin-top: 15px;
+        }
+    </style>
+
+    <script>
+        function EnviarDisc() {
+            let pergunta = document.getElementById("pergunta").value;
+            let resp = document.getElementById("resp").value;
+
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("msg").innerHTML = this.responseText;
+                }
+            }
+            xmlhttp.open("GET", "criarDisc.php?pergunta=" + encodeURIComponent(pergunta) + "&resp=" + encodeURIComponent(resp));
+            xmlhttp.send();
+        }
+    </script>
+</head>
+<body>
+    <nav>
+        <a href="/AV1-Javascript/home.php">Home</a>
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarMulti.html">Perguntas</a>
+        <a href="/AV1-Javascript/CRUDusuario/listar.html">Usuários</a>
+        <a href="/AV1-Javascript/logout.php" class="logout">Sair</a>
+    </nav>
+    <div class="sub-nav">
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarMulti.html">Criar Múltipla Escolha</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/criar/criarDisc.html">Criar Discursiva</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/listar/listarPR.html?reset=1">Quiz Perguntas e Respostas</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/listar/listarUmaPerg.html">Listar uma Pergunta</a><br>
+        <a href="/AV1-Javascript/CRUDpergunta/listar/listarTodasP.html">Listar Todas/Alterar/Deletar</a><br>
+    </div>
+
+
+    <h2>Criar nova pergunta Discursiva</h2>
+    <main class="main-align">
+        <form action="" method="GET">
+            <label for="pergunta">Pergunta:</label>
+            <input type="text" id="pergunta" required>
+
+            <label for="resp">Resposta:</label>
+            <textarea id="resp" required></textarea>
+
+            <input type="button" value="Cadastrar" onclick="EnviarDisc()">
+        </form>
+        <p id="msg"></p>
+    </main>
+</body>
+</html>

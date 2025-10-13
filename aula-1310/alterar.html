@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Alterar</title>
+ 
+
+    <script>
+        function alterarPergunta() {
+            let id = document.getElementById("id").value;
+            let pergunta = document.getElementById("pergunta").value;
+            let a = document.getElementById("a").value;
+            let b = document.getElementById("b").value;
+            let c = document.getElementById("c").value;
+            let d = document.getElementById("d").value;
+            let e = document.getElementById("e").value;
+            let rCerta = document.getElementById("rCerta").value;
+
+            if (!id || !pergunta) {
+                document.getElementById("msg").innerHTML = "Preencha todos os campos!";
+                return;
+            }
+
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("msg").innerHTML = this.responseText;
+                }
+            }
+
+            xmlhttp.open("GET", "http://localhost/ccc/alterar.php?id=" + id
+                + "&pergunta=" + pergunta
+                + "&a=" + a
+                + "&b=" + b
+                + "&c=" + c
+                + "&d=" + d
+                + "&e=" + e
+                + "&rCerta=" + rCerta);
+            xmlhttp.send();
+        }
+    </script>
+
+</head>
+<body>
+    <h2>Alterar Pergunta</h2>
+    <main class="main-align">
+        <form id="formPergunta">
+            ID: <input type="text" id="id" required>
+            Pergunta: <input type="text" id="pergunta" required>
+            Opção A: <input type="text" id="a">
+            Opção B: <input type="text" id="b">
+            Opção C: <input type="text" id="c">
+            Opção D: <input type="text" id="d">
+            Opção E: <input type="text" id="e">
+
+            Resposta certa:
+            <select id="rCerta">
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+            </select>
+
+            <input type="button" value="Salvar" onclick="alterarPergunta();">
+        </form>
+
+        <p id="msg"></p>
+    </main>
+</body>
+</html>

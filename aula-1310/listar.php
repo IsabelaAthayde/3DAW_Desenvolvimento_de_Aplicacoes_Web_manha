@@ -1,38 +1,28 @@
 <?php
+$arqPerg = fopen("perguntas.txt","r") or die("Erro ao abrir arquivo");
 
-$caminhoPerg = "./pergRes.txt";
-$perguntas = [];
-$i = 0;
+echo "<a href='./alterar.html'>Alterar Pergunta</a><br><a href='./incluir.html'>incluir Pergunta</a>";
 
-header('Content-Type: application/json');
 
-if (file_exists($caminhoPerg)) {
-    $arq = fopen($caminhoPerg, "r") or die("Erro ao abrir arquivo");
-    fgets($arq); 
-    while (!feof($arq)) {
-        $linha = fgets($arq);
-        if ($linha !== false && trim($linha) != "") {
-            $campos = explode(";", trim($linha));
-
-            $perguntas[i] = [
-                "id" => $campos[0],
-                "perg" => $campos[1],
-                "a" => $campos[2],
-                "b" => $campos[3],
-                "c" => $campos[4],
-                "d" => $campos[5],
-                "e" => $campos[6],
-                "rc" => $campos[7];
-            ];
-
-            $i++;
+echo "<h2>Lista de Perguntas</h2>";
+echo "<table border='1'>";
+echo "<tr><th>ID</th><th>Pergunta</th><th>Tipo</th><th>Ações</th></tr>";
+$linha = fgets($arqPerg);
+while(!feof($arqPerg)) {
+    $linha = trim(fgets($arqPerg));
+    if ($linha != "") {
+        $coluna = explode(";", $linha);
+        if (isset($coluna[0], $coluna[1], $coluna[2])) {
+            echo "<tr>
+                    <td>{$coluna[0]}</td>
+                    <td>{$coluna[1]}</td>
+                    <td>{$coluna[2]}</td>
+                    <td><a href='alterar.html?id={$coluna[0]}'>Editar</a></td>
+                </tr>";
         }
     }
-    $jsonString = json_encode($perguntas);
-    echo $jsonString;
-    fclose($arq);
 }
+echo "</table>";
 
-
+fclose($arqPerg);
 ?>
-

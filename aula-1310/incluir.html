@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Incluir Pergunta</title>
+<script>
+function EnviarPergunta() {
+    let id = document.getElementById("id").value;
+    let pergunta = document.getElementById("pergunta").value;
+    let tipo = document.getElementById("tipo").value;
+
+    if (id == "" || pergunta == "" || tipo == "") {
+        document.getElementById("msg").innerHTML = "Preencha todos os campos!";
+        return;
+    }
+
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("msg").innerHTML = this.responseText;
+        }
+    }
+    xmlhttp.open("POST", "Incluir.php");
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send("id=" + id + "&pergunta=" + pergunta + "&tipo=" + tipo);
+}
+</script>
+</head>
+<body>
+
+    <h1>Incluir Pergunta</h1>
+
+    <form id="formPergunta" onsubmit="return false;">
+        Id: <input type="text" id="id" required><br>
+        Pergunta: <input type="text" id="pergunta" required><br>
+        Tipo: <input type="text" id="tipo" required><br><br>
+        <input type="button" value="Cadastrar Pergunta" onclick="EnviarPergunta();">
+    </form>
+
+    <p id="msg"></p>
+
+    <br>
+    <a href="alterar.html">Alterar Pergunta</a><br>
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+id;pergunta;tipo
+1;Qual é a capital do Brasil?;multipla
+2;Quanto é 2 + 2?;aberta
+3;Quem descobriu o Brasil foi?;multipla
+4;Em que ano o homem pisou na Lua pela primeira vez?;multipla
+5;O que significa a sigla HTML?;aberta

@@ -1,71 +1,116 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>Alterar</title>
- 
+<meta charset="UTF-8">
+<title>Alterar Pergunta</title>
+<script>
+    window.onload = function() {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("id");
 
-    <script>
-        function alterarPergunta() {
-            let id = document.getElementById("id").value;
-            let pergunta = document.getElementById("pergunta").value;
-            let a = document.getElementById("a").value;
-            let b = document.getElementById("b").value;
-            let c = document.getElementById("c").value;
-            let d = document.getElementById("d").value;
-            let e = document.getElementById("e").value;
-            let rCerta = document.getElementById("rCerta").value;
+        if (id) {
+            document.getElementById("idBusca").value = id;
+            EnviarIdPergunta();
+        }
+    };
 
-            if (!id || !pergunta) {
-                document.getElementById("msg").innerHTML = "Preencha todos os campos!";
-                return;
-            }
+    function EnviarIdPergunta() {
+        let id = document.getElementById("idBusca").value.trim();
 
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    document.getElementById("msg").innerHTML = this.responseText;
+        if (id === "") {
+            document.getElementById("msg").innerHTML = "Digite um ID válido!";
+            return;
+        }
+
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState === 4) {
+                if (this.status === 200) {
+                    try {
+                        const objReturnJSON = JSON.parse(this.responseText);
+                        
+                        if (objReturnJSON.id && objReturnJSON.pergunta) {
+                            document.getElementById("id").value = objReturnJSON.id;
+                            document.getElementById("pergunta").value = objReturnJSON.pergunta;
+                            document.getElementById("tipo").value = objReturnJSON.tipo;
+                            document.getElementById("mdForm").style.display = "block";
+                            document.getElementById("msg").innerHTML = "Pergunta encontrada!";
+                        } else {
+                            document.getElementById("mdForm").style.display = "none";
+                            document.getElementById("msg").innerHTML = "Pergunta não encontrada.";
+                        }
+
+                    } catch (e) {
+                        console.error("Erro ao processar JSON:", e, this.responseText);
+                        document.getElementById("msg").innerHTML = "Erro ao buscar a pergunta.";
+                    }
+                } else {
+                    document.getElementById("msg").innerHTML = "Erro na requisição: " + this.status;
                 }
             }
-
-            xmlhttp.open("GET", "http://localhost/ccc/alterar.php?id=" + id
-                + "&pergunta=" + pergunta
-                + "&a=" + a
-                + "&b=" + b
-                + "&c=" + c
-                + "&d=" + d
-                + "&e=" + e
-                + "&rCerta=" + rCerta);
-            xmlhttp.send();
         }
-    </script>
+
+        xmlhttp.open("GET", "Buscar.php?id=" + encodeURIComponent(id), true);
+        xmlhttp.send();
+    }
+
+    function EnviarPergunta() {
+        let id = document.getElementById("id").value.trim();
+        let pergunta = document.getElementById("pergunta").value.trim();
+        let tipo = document.getElementById("tipo").value.trim();
+
+        if (id === "" || pergunta === "" || tipo === "") {
+            document.getElementById("msg").innerHTML = "Preencha todos os campos!";
+            return;
+        }
+
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState === 4) {
+                if (this.status === 200) {
+                    document.getElementById("msg").innerHTML = this.responseText;
+                } else {
+                    document.getElementById("msg").innerHTML = "Erro ao salvar alterações: " + this.status;
+                }
+            }
+        }
+
+        xmlhttp.open("POST", "Alterar.php", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send(
+            "id=" + encodeURIComponent(id) +
+            "&pergunta=" + encodeURIComponent(pergunta) +
+            "&tipo=" + encodeURIComponent(tipo)
+        );
+    }
+</script>
 
 </head>
 <body>
-    <h2>Alterar Pergunta</h2>
-    <main class="main-align">
-        <form id="formPergunta">
-            ID: <input type="text" id="id" required>
-            Pergunta: <input type="text" id="pergunta" required>
-            Opção A: <input type="text" id="a">
-            Opção B: <input type="text" id="b">
-            Opção C: <input type="text" id="c">
-            Opção D: <input type="text" id="d">
-            Opção E: <input type="text" id="e">
 
-            Resposta certa:
-            <select id="rCerta">
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-                <option value="D">D</option>
-                <option value="E">E</option>
-            </select>
+<h1>Alterar Pergunta</h1>
 
-            <input type="button" value="Salvar" onclick="alterarPergunta();">
-        </form>
+<div>
+    <form id="formIdPergunta">
+        <label>Digite o ID da Pergunta:</label><br>
+        <input type="text" id="idBusca" required>
+        <input type="button" value="Buscar" onclick="EnviarIdPergunta();">
+    </form>
+</div>
 
-        <p id="msg"></p>
-    </main>
+<a href="listar.php"><p>Não me Lembro do ID: Listar todas perguntas aqui</p></a>
+
+<div id="mdForm" style="display:none;">
+    <h3>Editar Pergunta</h3>
+    <form id="formPergunta">
+        Id: <input type="text" id="id" readonly><br>
+        Pergunta: <input type="text" id="pergunta"><br>
+        Tipo: <input type="text" id="tipo"><br><br>
+        <input type="button" value="Salvar Alteração" onclick="EnviarPergunta();">
+    </form>
+</div>
+
+<p id="msg"></p>
+
 </body>
 </html>

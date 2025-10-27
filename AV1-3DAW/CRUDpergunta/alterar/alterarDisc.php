@@ -27,7 +27,7 @@
     $pergunta = $perguntasById[$id];
     $msg = '';
 
-    $currentAnswer = $pergunta[7]; // resposta correta (última coluna)
+    $currentAnswer = $pergunta[7];  
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $textoPergunta = $_POST['pergunta'] ?? '';

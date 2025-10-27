@@ -6,7 +6,7 @@ $perguntas = [];
 
 if (file_exists($caminhoPerg)) {
     $arq = fopen($caminhoPerg, "r") or die(json_encode(["erro" => "Arquivo não encontrado"]));
-    fgets($arq); // pula cabeçalho
+    fgets($arq); 
     while (!feof($arq)) {
         $linha = fgets($arq);
         if ($linha && trim($linha) !== "") {

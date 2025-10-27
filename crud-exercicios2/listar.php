@@ -51,7 +51,7 @@ if (file_exists("disciplinas.txt")) {
         </thead>
         <tbody>
             <?php
-            // Se o array de disciplinas não está vazio, mostramos a lista
+           
             if (count($disciplinas) > 0) {
                 $i = 0;
                 while (isset($disciplinas[$i])) {
@@ -68,7 +68,6 @@ if (file_exists("disciplinas.txt")) {
                     $i++;
                 }
             } else {
-                // Se o array está vazio, mostramos a mensagem
                 echo "<tr><td colspan='4'>Nenhuma disciplina cadastrada</td></tr>";
             }
             ?>

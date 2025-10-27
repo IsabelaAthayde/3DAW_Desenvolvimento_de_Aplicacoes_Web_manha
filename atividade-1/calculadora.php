@@ -115,7 +115,7 @@
                         <td rowspan="2"><button type="submit" name="igual" value="=" class="botoesCalc" id="resultado">=</button></td>
                     </tr>
                     <tr>
-                        <td></td><!--só para centralizar o numero 0-->
+                        <td></td>
                         <td colspan="1"><button type="submit" name="numero" value="0" class="botoesCalc">0</button></td>
                         <td><button type="submit" name="numero" value="." class="botoesCalc">.</button></td>
                     </tr>

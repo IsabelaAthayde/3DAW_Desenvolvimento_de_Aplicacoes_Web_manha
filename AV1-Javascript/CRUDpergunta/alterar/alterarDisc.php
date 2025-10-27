@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     }
 
     $linhas = file($caminhoPerg, FILE_IGNORE_NEW_LINES);
-    $header = array_shift($linhas); // remove o cabeçalho
+    $header = array_shift($linhas); 
 
     $novaLista = [];
     $alterou = false;

@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="./style.css">
     <title>Lista de Alunos</title>
     <script>
-        function carregarAlunos() {
+        function listarTodosAlunos() {
             fetch('listar.php')
                 .then(response => response.json())
                 .then(data => {
@@ -32,7 +32,40 @@
                 })
                 .catch(() => {
                     document.getElementById('tbodyAlunos').innerHTML =
-                        '<tr><td colspan="4">Erro ao carregar alunos.</td></tr>';
+                        '<tr><td colspan="4">Faça uma busca! Erro ao carregar alunos.</td></tr>';
+                });
+        }
+
+        function listarUmAluno() {
+            const id = document.getElementById('id').value;
+            if (id === '') {
+                document.getElementById('msg').innerText = 'Informe o ID do aluno.';
+                return;
+            }
+            fetch('listar.php?id=' + id)
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById('tbodyAlunos');
+                    tbody.innerHTML = '';
+                    if (data.erro) {
+                        document.getElementById('msg').innerText = data.erro;
+                        return;
+                    }
+                    document.getElementById('msg').innerText = '';
+                    let row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${data.nome}</td>
+                        <td>${data.email}</td>
+                        <td>${data.matricula}</td>
+                        <td>
+                            <a style="color: green;" href="alterar.html?id=${data.id}">Alterar</a> |
+                            <a style="color: red;" href="#" onclick="deletarAluno(${data.id}); return false;">Deletar</a>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                })
+                .catch(() => {
+                    document.getElementById('msg').innerText = 'Erro ao buscar aluno.';
                 });
         }
 
@@ -42,13 +75,39 @@
                 .then(response => response.text())
                 .then(msg => {
                     alert(msg);
-                    carregarAlunos();
+                    listarTodosAlunos();
                 })
                 .catch(() => alert('Erro ao deletar aluno.'));
         }
 
-        window.onload = carregarAlunos;
+        window.onload = listarTodosAlunos;
     </script>
+
+    <style>
+        .botoes {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+        .botoes section {
+            width: 48%;
+        }
+        input[type="number"] {
+            margin-top: 5px;
+        }
+        button {
+            margin-top: 5px;
+            padding: 6px 12px;
+            border: none;
+            background-color: #333;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #555;
+        }
+    </style>
 </head>
 <body>
     <nav>
@@ -56,13 +115,26 @@
             <li><a href="./cadastro.html">Cadastrar</a></li>
             <li><a href="./listar.html">Listar</a></li>
             <li><a href="./buscar.html">Buscar</a></li>
-            <li><a href="./listar.html">Alterar (Alterações nada aba Listar alunos)</a></li>
+            <li><a href="./listar.html">Alterar (na aba Listar)</a></li>
             <li><a href="./deletar.html">Deletar</a></li>
         </ul>   
     </nav>
-    <h2>Lista de Alunos</h2>
 
-    <table border="1">
+    <section class="botoes">
+        <section>
+            <h2>Listar Um Aluno</h2> 
+            <input type="number" id="id" placeholder="ID do aluno" min="0">
+            <button onclick="listarUmAluno()">Listar Um</button>
+            <p id="msg"></p>
+        </section>
+
+        <section style="text-align: right;">
+            <h2>Listar Todos os Alunos</h2> 
+            <button onclick="listarTodosAlunos()">Listar Todos</button>
+        </section>
+    </section>
+
+    <table border="1" width="100%">
         <thead>
             <tr>
                 <th>Nome</th>

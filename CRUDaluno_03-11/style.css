@@ -111,6 +111,13 @@ form input {
     text-align: center;
 }
 
+button {
+    background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+    color: var(--darker-bg);
+    padding: 10px;
+    margin: 20px 0;
+}
+
 form input[type="button"]:hover {
     transform: translateY(-2px);
     box-shadow: 0 0 30px rgba(183, 0, 255, 0.4);

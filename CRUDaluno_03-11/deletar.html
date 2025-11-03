@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Deletar Aluno</title>
+
+    <script>
+        function deletarAluno() {
+            const id = document.getElementById("id").value.trim();
+            const msg = document.getElementById("msg");
+
+            if (!id) {
+                msg.innerHTML = "Informe o ID do aluno.";
+                return;
+            }
+
+            fetch("deletar.php?id=" + encodeURIComponent(id))
+                .then(res => res.json())
+                .then(data => {
+                    if (data.erro) {
+                        msg.innerHTML = data.erro;
+                    } else if (data.sucesso) {
+                        msg.innerHTML = data.sucesso;
+                    } else {
+                        msg.innerHTML = "Resposta inesperada do servidor.";
+                    }
+                })
+                .catch(() => msg.innerHTML = "Erro ao conectar ao servidor.");
+        }
+    </script>
+</head>
+<body>
+    <nav>
+    <ul>
+        <li><a href="./cadastro.html">Cadastrar</a></li>
+        <li><a href="./listar.html">Listar</a></li>
+        <li><a href="./buscar.html">Buscar</a></li>
+        <li><a href="./listar.html">Alterar (Alterações nada aba Listar alunos)</a></li>
+        <li><a href="./deletar.html">Deletar</a></li>
+    </ul>
+    </nav>
+    <main>
+        <h2>Excluir Aluno</h2>
+        <input type="number" id="id" placeholder="ID do aluno">
+        <input type="button" value="Deletar" onclick="deletarAluno()">
+        <p id="msg"></p>
+    </main>
+</body>
+</html>

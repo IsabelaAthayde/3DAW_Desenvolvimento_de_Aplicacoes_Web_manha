@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Buscar aluno</title>
+
+    <script>
+        function buscarAluno() {
+            const busca = document.getElementById("busca").value.trim();
+            const resultados = document.getElementById("resultados");
+
+            if (busca === "") {
+                resultados.innerHTML = "<p>Digite um termo para buscar.</p>";
+                return;
+            }
+
+            fetch("buscar.php?busca=" + encodeURIComponent(busca))
+                .then(res => res.json())
+                .then(data => {
+                    if (data.erro) {
+                        resultados.innerHTML = "<p>" + data.erro + "</p>";
+                        return;
+                    }
+
+                    if (data.length === 0) {
+                        resultados.innerHTML = "<p>Nenhum aluno encontrado.</p>";
+                        return;
+                    }
+
+                    let html = "<table><tr><th>ID</th><th>Nome</th><th>Email</th></tr>";
+                    data.forEach(a => {
+                        html += `<tr>
+                                    <td>${a.id}</td>
+                                    <td>${a.nome}</td>
+                                    <td>${a.email}</td>
+                                 </tr>`;
+                    });
+                    html += "</table>";
+                    resultados.innerHTML = html;
+                })
+                .catch(() => {
+                    resultados.innerHTML = "<p>Erro ao buscar alunos.</p>";
+                });
+        }
+    </script>
+</head>
+<body>
+    <nav>
+    <ul>
+        <li><a href="./cadastro.html">Cadastrar</a></li>
+        <li><a href="./listar.html">Listar</a></li>
+        <li><a href="./buscar.html">Buscar</a></li>
+        <li><a href="./listar.html">Alterar (Alterações nada aba Listar alunos)</a></li>
+        <li><a href="./deletar.html">Deletar</a></li>
+    </ul>
+    </nav>
+    <h2>Buscar alunos</h2>
+
+    <main>
+        <form onsubmit="event.preventDefault(); buscarAluno();">
+            <input type="text" id="busca" placeholder="Nome ou e-mail do aluno">
+            <input type="submit" value="Buscar">
+        </form>
+        <section id="resultados"></section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./style.css">
+  <title>Cadastrar</title>
+  <script>
+    function EnviarAluno() {
+      let nome = document.getElementById("nome").value.trim();
+      let email = document.getElementById("email").value.trim();
+      let matricula = document.getElementById("matricula").value.trim();
+      let msg = document.getElementById("msg");
+
+      if (nome === "" || email === "" || matricula === "") {
+        msg.innerHTML = "Preencha todos os campos!";
+        msg.style.color = "red";
+        return;
+      }
+
+      let xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+          try {
+            let resposta = JSON.parse(this.responseText);
+            if (resposta.sucesso) {
+              msg.innerHTML = resposta.sucesso + " (ID: " + resposta.id + ")";
+              msg.style.color = "green";
+              document.getElementById("formAluno").reset();
+            } else {
+              msg.innerHTML = resposta.erro || "Erro desconhecido";
+              msg.style.color = "red";
+            }
+          } catch (e) {
+            msg.innerHTML = "Erro no retorno do servidor.";
+            msg.style.color = "red";
+          }
+        }
+      };
+
+      let url = "./cadastro.php?nome=" + encodeURIComponent(nome) +
+                "&email=" + encodeURIComponent(email) +
+                "&matricula=" + encodeURIComponent(matricula);
+
+      xmlhttp.open("GET", url, true);
+      xmlhttp.send();
+    }
+  </script>
+</head>
+<body>
+  <nav>
+    <ul>
+        <li><a href="./cadastro.html">Cadastrar</a></li>
+        <li><a href="./listar.html">Listar</a></li>
+        <li><a href="./buscar.html">Buscar</a></li>
+        <li><a href="./listar.html">Alterar (Alterações nada aba Listar alunos)</a></li>
+        <li><a href="./deletar.html">Deletar</a></li>
+    </ul>
+    </nav>
+  <main class="main-align">
+    <form id="formAluno" onsubmit="return false;">
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" name="nome" required><br>
+
+      <label for="email">Email:</label>
+      <input type="text" id="email" name="email" required><br>
+
+      <label for="matricula">Matrícula:</label>
+      <input type="text" id="matricula" name="matricula" required><br><br>
+
+      <input type="button" value="Cadastrar" onclick="EnviarAluno();" style="margin: -40px auto;">
+    </form>
+    <p id="msg"></p>
+  </main>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+  <title>Alterar Aluno</title>
+
+  <script>
+    function carregarAluno() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      if (!id) {
+        alert("ID do aluno não fornecido!");
+        return;
+      }
+      document.getElementById("id").value = id;
+
+      fetch('alterar.php?id=' + id)
+        .then(response => response.json())
+        .then(aluno => {
+          if (aluno.erro) {
+            document.getElementById("msg").innerText = aluno.erro;
+            return;
+          }
+          document.getElementById("nome").value = aluno.nome;
+          document.getElementById("email").value = aluno.email;
+          document.getElementById("matricula").value = aluno.matricula;
+        })
+        .catch(() => document.getElementById("msg").innerText = "Erro ao carregar dados do aluno.");
+    }
+
+    function alterarAluno() {
+      const id = document.getElementById("id").value;
+      const nome = document.getElementById("nome").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const matricula = document.getElementById("matricula").value.trim();
+      const msg = document.getElementById("msg");
+
+      if (!nome || !email || !matricula) {
+        msg.innerText = "Preencha todos os campos!";
+        return;
+      }
+
+      fetch('alterar.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `id=${encodeURIComponent(id)}&nome=${encodeURIComponent(nome)}&email=${encodeURIComponent(email)}&matricula=${encodeURIComponent(matricula)}`
+      })
+      .then(response => response.json())
+      .then(retorno => {
+        if (retorno.sucesso) {
+          msg.style.color = "green";
+          msg.innerText = retorno.sucesso;
+        } else {
+          msg.style.color = "red";
+          msg.innerText = retorno.erro || "Erro ao atualizar aluno.";
+        }
+      })
+      .catch(() => msg.innerText = "Erro de comunicação com o servidor.");
+    }
+
+    window.onload = carregarAluno;
+  </script>
+</head>
+<body>
+  <nav>
+    <ul>
+        <li><a href="./cadastro.html">Cadastrar</a></li>
+        <li><a href="./listar.html">Listar</a></li>
+        <li><a href="./buscar.html">Buscar</a></li>
+        <li><a href="./listar.html">Alterar (Alterações nada aba Listar alunos)</a></li>
+        <li><a href="./deletar.html">Deletar</a></li>
+    </ul>
+    </nav>
+    <h2>Alterar Aluno</h2>
+
+  <main>
+    <form onsubmit="event.preventDefault(); alterarAluno();">
+      <input type="hidden" id="id">
+      Nome: <input type="text" id="nome"><br>
+      Email: <input type="text" id="email"><br>
+      Matrícula: <input type="text" id="matricula"><br>
+      <input type="submit" value="Salvar">
+    </form>
+    <p id="msg"></p>
+  </main>
+</body>
+</html>
